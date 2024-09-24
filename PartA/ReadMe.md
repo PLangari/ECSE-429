@@ -6,3 +6,9 @@
 
 ## To run only the tests where the actual behaviour is not what is expected:
     `pytest -vk "actual_behaviour_passing" --random-order`
+
+## To test only if the application is running:
+    `pytest -vk "check_application_running"`
+
+## To test only if the application is shutdown:
+    `pytest -vk "check_application_shutdown"`
