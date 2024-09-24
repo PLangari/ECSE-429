@@ -16,7 +16,6 @@ def test_head_projects_with_non_existing_id():
     assert response.headers["Content-Type"] == "application/json"
 
 # OPTIONS Tests
-
 def test_options_for_projects_with_existing_id():
     response = requests.options(f'{DEFAULT_API_URL}/projects/{default_project_id}')
     assert response.status_code == 200
@@ -62,7 +61,7 @@ def test_post_project_with_nonexistent_id():
     assert response.status_code == 404
     assert response.json()["errorMessages"][0] == f"No such project entity instance with GUID or ID {nonexistent_id} found"
 
-def test_post_project_with_id_and_bad_field():
+def test_post_project_with_id_and_invalid_field():
     id_of_new_project_1 = create_new_project(new_project_1_title, new_project_1_completed, new_project_1_active, new_project_1_description)
     invalid_field = "invalid_field"
     response = requests.post(f'{DEFAULT_API_URL}/projects/{id_of_new_project_1}', json={f"{invalid_field}": "Doesn't matter"})
@@ -135,7 +134,7 @@ def test_put_with_id_and_only_active_filled_out():
     assert response.json()["description"] == ""
     delete_project_by_id(id_of_new_project_1)
 
-def test_put_project_with_id_and_bad_field():
+def test_put_project_with_id_and_invalid_field():
     id_of_new_project_1 = create_new_project(new_project_1_title, new_project_1_completed, new_project_1_active, new_project_1_description)
     invalid_field = "invalid_field"
     response = requests.put(f'{DEFAULT_API_URL}/projects/{id_of_new_project_1}', json={f"{invalid_field}": "Doesn't matter"})
