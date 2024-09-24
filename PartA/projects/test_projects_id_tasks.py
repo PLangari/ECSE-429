@@ -39,7 +39,7 @@ def test_get_tasks_of_project_with_existing_id_and_no_tasks(create_project_witho
     assert response.status_code == 200
     assert len(response.json()["todos"]) == 0
 
-@pytest.mark.actual_behaviour_working
+@pytest.mark.actual_behaviour_passing
 def test_get_tasks_of_project_with_non_existing_id():
     nonexisting_id = "999"
     response = requests.get(f"{DEFAULT_API_URL}/projects/{nonexisting_id}/tasks")

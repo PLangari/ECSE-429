@@ -38,7 +38,7 @@ def test_get_categories_of_project_with_existing_id_and_no_categories(create_pro
     assert response.status_code == 200
     assert len(response.json()["categories"]) == 0
 
-@pytest.mark.actual_behaviour_working
+@pytest.mark.actual_behaviour_passing
 def test_get_categories_of_project_with_non_existing_id(create_project_with_categories):
     nonexisting_id = "999"
     response = requests.get(f"{DEFAULT_API_URL}/projects/{nonexisting_id}/categories")

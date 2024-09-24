@@ -100,7 +100,7 @@ def test_post_new_project_only_title_filled_out():
     assert response.json()["description"] == ""
     delete_project_by_id(int(response.json()["id"]))
 
-@pytest.mark.actual_behaviour_working
+@pytest.mark.actual_behaviour_passing
 def test_post_new_project_no_title_filled_out():
     response = requests.post(f'{DEFAULT_API_URL}/projects', json={"description": "This is a new project"})
     assert response.status_code == 201
