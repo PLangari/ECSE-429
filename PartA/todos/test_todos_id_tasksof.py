@@ -41,6 +41,7 @@ def test_get_for_todos_tasksof_with_no_projects():
     response = requests.get(f'{DEFAULT_API_URL}/todos/{id_of_new_todo}/tasksof')
     assert response.status_code == 200
     assert len(response.json()["projects"]) == 0 
+    delete_todo_by_id(id_of_new_todo)
 
 def test_get_for_todos_tasksof_with_id_by_id():
     p_id = requests.post(f'{DEFAULT_API_URL}/projects', json={"title": "Test Project"}).json()["id"]

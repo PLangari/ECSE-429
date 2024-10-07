@@ -20,6 +20,7 @@ def test_head_request_for_todos():
 def test_get_all_todos(add_todos_to_database_and_cleanup):
     response = requests.get(f'{DEFAULT_API_URL}/todos')
     assert response.status_code == 200
+    print(response.json())
     assert len(response.json()['todos']) == 4
 
 def test_get_all_done_todos(add_todos_to_database_and_cleanup):
