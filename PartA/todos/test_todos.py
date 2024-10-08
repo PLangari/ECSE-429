@@ -82,6 +82,7 @@ def test_post_new_todo_only_title():
     assert response.json()["title"] == "new task"
     assert response.json()["doneStatus"] == "false"
     assert response.json()["description"] == ""
+    delete_todo_by_id(response.json()["id"])
 
 def test_post_new_todo_no_title():
     response = requests.post(f'{DEFAULT_API_URL}/todos', json={
