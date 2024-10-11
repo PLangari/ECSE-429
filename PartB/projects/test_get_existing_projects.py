@@ -3,14 +3,17 @@ from utils.default_variables import DEFAULT_API_URL
 from utils.shared_step_definitions import *
 import requests
 
+# Normal Flow
 @scenario("../features/projects/get_existing_projects.feature", "Get all existing projects")
 def test_get_existing_projects():
     pass
 
+# Alternate Flow
 @scenario("../features/projects/get_existing_projects.feature", "Get all existing projects by a specific active status")
 def test_get_existing_projects_by_active_status():
     pass
 
+# Error Flow
 @pytest.mark.expected_behaviour_failing
 @scenario("../features/projects/get_existing_projects.feature", "Get all existing projects by an invalid parameter")
 def test_get_existing_projects_with_invalid_param():

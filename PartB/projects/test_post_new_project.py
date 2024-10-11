@@ -3,15 +3,6 @@ from utils.default_variables import DEFAULT_API_URL
 from utils.shared_step_definitions import *
 import requests
 
-# Cleanup function to delete created projects during tests
-@pytest.fixture
-def delete_created_project():
-    yield
-    response = requests.get(f'{DEFAULT_API_URL}/projects')
-    for project in response.json()['projects']:
-        if project['title'] == "Yard Renovation" or project['title'] == "Garage Cleanup":
-            delete_project_by_id(project['id'])
-
 # Normal Flow
 @scenario("../features/projects/post_new_project.feature", "Post a new project with all parameter fields filled out")
 def test_post_new_project_all_parameter_fields_filled_out():
@@ -52,10 +43,7 @@ def assert_project_object(title, description, completed, active, returnedRespons
     assert returnData["active"] == active
     delete_project_by_id(returnData["id"])
 
-@then(parsers.parse('an error "{error}" shall be returned'))
-def assert_error_message(error, returnedResponse):
-    returnData = returnedResponse['response'].json()
-    assert returnData["errorMessages"][0] == error
+
 
 
 

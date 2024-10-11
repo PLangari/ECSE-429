@@ -21,12 +21,15 @@ def create_new_project(title, completed, active, description):
     assert response.status_code == 201
     return response.json()
 
-# Responsive API step defintion
+# Shared step definitio to assert API responsiveness
+@pytest.mark.order(1)
 @given("the API is running and responsive")
 def is_api_responsive():
+    print("Checking if API is responsive")
     response = requests.get(DEFAULT_API_URL)
     assert response.status_code == 200, "API is not active"
 
+# Add projects to the database and clean up after the tests
 @given("the database contains existing projects")
 def add_projects_to_database_and_cleanup():
     new_project_1 = create_new_project("Yard Renovation", False, True, "Tidy up and freshen up the yard")
@@ -39,9 +42,14 @@ def add_projects_to_database_and_cleanup():
     delete_project_by_id(new_project_3['id'])
     delete_project_by_id(new_project_4['id'])
 
+# Shared step definition to assert the status code of the response
 @then(parsers.parse('a status code of "{statusCode}" shall be returned'))
 def assert_status_code_201(statusCode, returnedResponse):
     returnData = returnedResponse['response']
     assert returnData.status_code == int(statusCode)
 
-
+# Shared step definition to assert the error message of the response
+@then(parsers.parse('an error "{error}" shall be returned'))
+def assert_error_message(error, returnedResponse):
+    returnData = returnedResponse['response'].json()
+    assert returnData["errorMessages"][0] == error
