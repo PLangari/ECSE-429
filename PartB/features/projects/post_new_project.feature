@@ -1,4 +1,4 @@
-Feature: Post New Project
+Feature: Post new project
     As a user, I want to create a new project, so that I can manage my projects
 
     Background: 

@@ -34,20 +34,20 @@ def get_all_projects_with_invalid_param(owner, returnedResponse):
 @then("a list of existing projects shall be returned")
 def assert_all_existing_projects(returnedResponse):
     returnData = returnedResponse['response'].json() 
-    sorted_projects = sorted(returnData['projects'], key=lambda project: project['id'])
-    assert len(sorted_projects) == 5
-    assert sorted_projects[0]['title'] == "Office Work"
-    assert sorted_projects[1]['title'] == "Yard Renovation"
-    assert sorted_projects[2]['title'] == "Garage Cleanup"
-    assert sorted_projects[3]['title'] == "Renovate Bathroom"
-    assert sorted_projects[4]['title'] == "Clean Kitchen"
+    sortedProjects = sorted(returnData['projects'], key=lambda project: project['id'])
+    assert len(sortedProjects) == 5
+    assert sortedProjects[0]['title'] == "Office Work"
+    assert sortedProjects[1]['title'] == "Yard Renovation"
+    assert sortedProjects[2]['title'] == "Garage Cleanup"
+    assert sortedProjects[3]['title'] == "Renovate Bathroom"
+    assert sortedProjects[4]['title'] == "Clean Kitchen"
 
 @then(parsers.parse('a list of existing projects with active status "{active}" shall be returned'))
 def assert_all_projects_by_active_status(active, returnedResponse):
     returnData = returnedResponse['response'].json()
-    sorted_projects = sorted(returnData['projects'], key=lambda project: project['id'])
-    allTrueProjects = [project for project in sorted_projects if project['active'] == "true"]
-    allFalseProjects = [project for project in sorted_projects if project['active'] == "false"]
+    sortedProjects = sorted(returnData['projects'], key=lambda project: project['id'])
+    allTrueProjects = [project for project in sortedProjects if project['active'] == "true"]
+    allFalseProjects = [project for project in sortedProjects if project['active'] == "false"]
     if active == "true":
         assert len(allTrueProjects) == 2
         assert allTrueProjects[0]['title'] == "Yard Renovation"
