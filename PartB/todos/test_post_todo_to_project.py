@@ -4,22 +4,22 @@ from utils.general_step_definitions import *
 import requests
 
 # Normal Flow
-@scenario("../features/todos/post_todo_to_existing_project.feature", "Add an existing todo to an existing project")
-def test_post_todo_to_existing_project():
+@scenario("../features/todos/post_todo_to_project.feature", "Add an existing todo to an existing project")
+def test_post_todo_to_project():
     pass
 
 # Alternate Flow
-@scenario("../features/todos/post_todo_to_existing_project.feature", "Create a new project for the todo")
-def test_post_todo_to_existing_project_with_only_title():
+@scenario("../features/todos/post_todo_to_project.feature", "Create a new project for the todo")
+def test_post_todo_to_project_with_only_title():
     pass
 
 # Error Flow
-@scenario("../features/todos/post_todo_to_existing_project.feature", "Add a todo to a nonexisting project")
-def test_post_todo_to_existing_project_with_invalid_parameter():
+@scenario("../features/todos/post_todo_to_project.feature", "Add a todo to a nonexisting project")
+def test_post_todo_to_project_with_invalid_parameter():
     pass
 
 @when(parsers.parse('the user requests to add an existing todo "{todoId}" to an existing project "{projectId}"'))
-def post_todo_to_existing_project(todoId, projectId, returnedResponse):
+def post_todo_to_project(todoId, projectId, returnedResponse):
     allProjects = requests.get(f'{DEFAULT_API_URL}/projects') 
     sortedProjects = sorted(allProjects.json()['projects'], key=lambda project: project['id'])
     pId = sortedProjects[int(projectId)]['id']
@@ -31,14 +31,14 @@ def post_todo_to_existing_project(todoId, projectId, returnedResponse):
     print(returnedResponse)
 
 @when(parsers.parse('the user requests to add an existing todo "{todoId}" to a new project "{projectName}"'))
-def post_todo_to_existing_project_with_only_title(todoId, projectName, returnedResponse):
+def post_todo_to_project_with_only_title(todoId, projectName, returnedResponse):
     allTodos = requests.get(f'{DEFAULT_API_URL}/todos')
     sortedTodos = sorted(allTodos.json()['todos'], key=lambda todo: todo['id'])
     tId = sortedTodos[int(todoId)]['id']
     returnedResponse['response'] = requests.post(f'{DEFAULT_API_URL}/todos/{tId}/tasksof', json={"title": projectName})
 
 @when(parsers.parse('the user requests to add an existing todo "{todoId}" to a nonexisting project "{projectId}"'))
-def post_todo_to_existing_project_with_invalid_parameter(todoId, projectId, returnedResponse):
+def post_todo_to_project_with_invalid_parameter(todoId, projectId, returnedResponse):
     allTodos = requests.get(f'{DEFAULT_API_URL}/todos')
     sortedTodos = sorted(allTodos.json()['todos'], key=lambda todo: todo['id'])
     tId = sortedTodos[int(todoId)]['id']
