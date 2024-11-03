@@ -20,6 +20,11 @@ def delete_task_by_id(id):
     response = requests.delete(DEFAULT_API_URL + f"/todos/{id}")
     assert response.status_code == 200
 
+# Delete category by ID. Used for test cleanup
+def delete_category_by_id(id):
+    response = requests.delete(DEFAULT_API_URL + f"/categories/{id}")
+    assert response.status_code == 200
+
 # Create a new project with the given parameters
 def create_new_project(title, completed, active, description):
     response = requests.post(DEFAULT_API_URL + "/projects", json={"title": title, "completed": completed, "active": active, "description": description})
@@ -30,6 +35,28 @@ def create_new_task(title, doneStatus, description, projectId):
     response = requests.post(DEFAULT_API_URL + f"/projects/{projectId}/tasks", json={"title": title, "doneStatus": doneStatus, "description": description})
     assert response.status_code == 201
     return response.json()
+
+# Associate a task to a category
+def link_task_to_category(taskId, categoryId):
+    print()
+    response = requests.post(DEFAULT_API_URL + f"/categories/{categoryId}/todos",  json={"id": taskId})
+    print("Task ID: " + taskId, "Category ID: " + categoryId)
+    assert response.status_code == 201
+
+# Delete link between a task and a category
+def delete_link_task_to_category(taskId, categoryId):
+    response = requests.delete(DEFAULT_API_URL + f"/categories/{categoryId}/todos/{taskId}")
+    assert response.status_code == 200
+
+# Associate a project to a category
+def link_project_to_category(projectId, categoryId):
+    response = requests.post(DEFAULT_API_URL + f"/categories/{categoryId}/projects",  json={"id": projectId})
+    assert response.status_code == 201
+
+# Delete link between a project and a category
+def delete_link_project_to_category(projectId, categoryId):
+    response = requests.delete(DEFAULT_API_URL + f"/categories/{categoryId}/projects/{projectId}")
+    assert response.status_code == 200
 
 # Shared step definitio to assert API responsiveness
 @pytest.mark.order(1)
@@ -75,6 +102,66 @@ def add_tasks_associated_to_existing_projects_to_database_and_cleanup():
     delete_task_by_id(new_task_3['id'])
     delete_task_by_id(new_task_4['id'])
     delete_task_by_id(new_task_5['id'])
+
+# Associate tasks to existing categories and clean up after the tests
+@given("the database contains existing todos associated to existing categories")
+def add_tasks_associated_to_existing_categories_to_database_and_cleanup():
+    # Get existing categories
+    allCategories = requests.get(f'{DEFAULT_API_URL}/categories')
+    sortedCategories = sorted(allCategories.json()['categories'], key=lambda category: category['id'])
+    # IDs of categories to add tasks to
+    categoryId_1 = sortedCategories[2]['id']
+    categoryId_2 = sortedCategories[3]['id']
+    # Get existing tasks
+    allTasks = requests.get(f'{DEFAULT_API_URL}/todos')
+    sortedTasks = sorted(allTasks.json()['todos'], key=lambda task: task['id'])
+    # IDs of tasks to add to categories
+    taskId_1 = sortedTasks[2]['id']
+    taskId_2 = sortedTasks[3]['id']
+    taskId_3 = sortedTasks[4]['id']
+    taskId_4 = sortedTasks[5]['id']
+    # Add tasks to category_1
+    link_task_to_category(taskId_1, categoryId_1)
+    link_task_to_category(taskId_2, categoryId_1)
+     # Add tasks to category_2
+    link_task_to_category(taskId_3, categoryId_2)
+    link_task_to_category(taskId_4, categoryId_2)
+    yield
+    # Delete links between tasks and categories
+    delete_link_task_to_category(taskId_1, categoryId_1)
+    delete_link_task_to_category(taskId_2, categoryId_1)
+    delete_link_task_to_category(taskId_3, categoryId_2)
+    delete_link_task_to_category(taskId_4, categoryId_2)
+    
+# Add projects associated to existing categories to the database and clean up after the tests
+@given("the database contains existing projects associated to existing categories")
+def add_projects_associated_to_existing_categories_to_database_and_cleanup():
+    # Get existing categories
+    allCategories = requests.get(f'{DEFAULT_API_URL}/categories')
+    sortedCategories = sorted(allCategories.json()['categories'], key=lambda category: category['id'])
+    # IDs of categories to add projects to
+    categoryId_1 = sortedCategories[2]['id']
+    categoryId_2 = sortedCategories[3]['id']
+    # Get existing projects
+    allProjects = requests.get(f'{DEFAULT_API_URL}/projects')
+    sortedProjects = sorted(allProjects.json()['projects'], key=lambda project: project['id'])
+    # IDs of projects to add to categories
+    projectId_1 = sortedProjects[1]['id']
+    projectId_2 = sortedProjects[2]['id']
+    projectId_3 = sortedProjects[3]['id']
+    projectId_4 = sortedProjects[4]['id']
+    # Add projects to category_1
+    link_project_to_category(projectId_1, categoryId_1)
+    link_project_to_category(projectId_2, categoryId_1)
+     # Add projects to category_2
+    link_project_to_category(projectId_3, categoryId_2)
+    link_project_to_category(projectId_4, categoryId_2)
+    yield
+    # Delete links between projects and categories
+    delete_link_project_to_category(projectId_1, categoryId_1)
+    delete_link_project_to_category(projectId_2, categoryId_1)
+    delete_link_project_to_category(projectId_3, categoryId_2)
+    delete_link_project_to_category(projectId_4, categoryId_2)
 
 # Shared step definition to assert the status code of the response
 @then(parsers.parse('a status code of "{statusCode}" shall be returned'))
