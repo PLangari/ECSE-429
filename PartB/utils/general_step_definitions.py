@@ -64,6 +64,31 @@ def add_todos_to_database_and_cleanup():
     for todo in todos:
         delete_todo_by_id(todo['id'])
 
+# Step definition to set up the database with categories and projects
+@given("the database contains existing categories and projects")
+def setup_categories_and_projects():
+    # Add sample categories
+    category1 = requests.post(f'{DEFAULT_API_URL}/categories', json={"title": "Category_1", "description": "Test Category 1"})
+    category2 = requests.post(f'{DEFAULT_API_URL}/categories', json={"title": "Category_2", "description": "Test Category 2"})
+    assert category1.status_code == 201
+    assert category2.status_code == 201
+
+    # Add sample projects to the categories
+    project1 = requests.post(f'{DEFAULT_API_URL}/projects', json={
+        "title": "Project_1", 
+        "description": "Test Project 1",
+        "completed": False,
+        "active": True
+    })
+    project2 = requests.post(f'{DEFAULT_API_URL}/projects', json={
+        "title": "Project_2", 
+        "description": "Test Project 2",
+        "completed": True,
+        "active": False
+    })
+    assert project1.status_code == 201
+    assert project2.status_code == 201
+
 # Add projects to the database and clean up after the tests
 @given("the database contains existing projects")
 def add_projects_to_database_and_cleanup():
@@ -105,4 +130,3 @@ def assert_status_code_201(statusCode, returnedResponse):
 def assert_error_message(error, returnedResponse):
     returnData = returnedResponse['response'].json()
     assert returnData["errorMessages"][0] == error
-
