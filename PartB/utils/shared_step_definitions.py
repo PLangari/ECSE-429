@@ -38,9 +38,7 @@ def create_new_task(title, doneStatus, description, projectId):
 
 # Associate a task to a category
 def link_task_to_category(taskId, categoryId):
-    print()
     response = requests.post(DEFAULT_API_URL + f"/categories/{categoryId}/todos",  json={"id": taskId})
-    print("Task ID: " + taskId, "Category ID: " + categoryId)
     assert response.status_code == 201
 
 # Delete link between a task and a category

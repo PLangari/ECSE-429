@@ -41,5 +41,3 @@ Feature: Edit an existing category
         | 2 | Chris Vatos | Could not find field: owner |
         | 3 | Parsa Langari| Could not find field: owner |
         | 4 | Jasmine Taggart | Could not find field: owner |
-            
-

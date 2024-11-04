@@ -25,7 +25,6 @@ def get_existing_projects_of_existing_category(categoryId, returnedResponse):
     allCategories = requests.get(f'{DEFAULT_API_URL}/categories') 
     sortedCategories = sorted(allCategories.json()['categories'], key=lambda category: category['id'])
     categoryIdToGetProjectsOf = sortedCategories[int(categoryId)]['id']
-    print("categoryIdToGetProjectsOf: ", categoryIdToGetProjectsOf)
     returnedResponse['response'] = requests.get(f'{DEFAULT_API_URL}/categories/{categoryIdToGetProjectsOf}/projects')
 
 @when(parsers.parse('the user requests to get all projects associated to existing category with id "{categoryId}" and active status "{active}"'))

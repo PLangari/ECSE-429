@@ -25,7 +25,6 @@ def get_existing_todos_of_existing_category(categoryId, returnedResponse):
     allCategories = requests.get(f'{DEFAULT_API_URL}/categories') 
     sortedCategories = sorted(allCategories.json()['categories'], key=lambda category: category['id'])
     categoryIdToGetTodosOf = sortedCategories[int(categoryId)]['id']
-    print("categoryIdToGetTodosOf: ", categoryIdToGetTodosOf)
     returnedResponse['response'] = requests.get(f'{DEFAULT_API_URL}/categories/{categoryIdToGetTodosOf}/todos')
 
 @when(parsers.parse('the user requests to get all todos associated to existing category with id "{categoryId}" and done status "{doneStatus}"'))

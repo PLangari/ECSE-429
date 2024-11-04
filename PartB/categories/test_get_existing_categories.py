@@ -36,7 +36,6 @@ def get_all_categories_with_invalid_param(owner, returnedResponse):
 def assert_all_existing_categories(returnedResponse):
     returnData = returnedResponse['response'].json()
     sortedCategories = sorted(returnData['categories'], key=lambda category: int(category['id']))
-    print("sortedCategories: ", sortedCategories)
     assert len(sortedCategories) == 6
     assert sortedCategories[0]['title'] == "Office"
     assert sortedCategories[1]['title'] == "Home"
