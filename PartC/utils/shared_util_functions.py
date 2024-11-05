@@ -3,6 +3,8 @@ import time
 import psutil
 from openpyxl import Workbook, load_workbook
 
+java_api_pid = 15640
+
 def get_metrics(url, method_type, method_body):
     # Start time of api call
     start_time = time.time()
@@ -15,17 +17,17 @@ def get_metrics(url, method_type, method_body):
     elif(method_type == "DELETE"):
         response = requests.delete(url)
 
-    # End time of api call
-    end_time = time.time()
+    # Retrieve the cpu usage and memory usage before the api call
+    cpu_percent = psutil.cpu_percent(interval=0.1) 
+    mem_percent = psutil.virtual_memory().percent
 
-    # Retrieve the cpu usage and memory usage after the api call
-    cpu_end_percent = psutil.cpu_percent(0.25)
-    mem_end_percent = psutil.virtual_memory().percent
+    # End time of api call
+    end_time = time.time()   
 
     # Calculate the response time, cpu usage and memory usage
     response_time = end_time - start_time
 
-    return response_time, cpu_end_percent, mem_end_percent
+    return response_time, cpu_percent, mem_percent
 
 
 # Methods to create excel file and necessary shhets append data to excel file and close the workbook

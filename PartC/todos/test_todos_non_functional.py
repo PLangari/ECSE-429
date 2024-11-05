@@ -1,12 +1,12 @@
-import psutil
+import time
 import pytest
 import requests
 from utils.default_variables import DEFAULT_API_URL
 from utils.shared_util_functions import get_metrics, create_excel_file, append_data_to_excel, close_workbook
 from utils.populating_db import populate_todos, delete_all_todos
 
-max_number_of_objects = 1000
-objects_to_increment_by = 100
+max_number_of_objects = 10000
+objects_to_increment_by = 25
 
 @pytest.mark.order(1)
 def test_create_todo_excel_file_and_data_sheets():
