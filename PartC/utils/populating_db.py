@@ -20,3 +20,12 @@ def delete_all_categories():
     allCategories = requests.get(f'{DEFAULT_API_URL}/categories')
     for category in allCategories.json()['categories']:
         requests.delete(f'{DEFAULT_API_URL}/categories/{category["id"]}')
+
+def populate_projects(num_projects):
+    for i in range(num_projects):
+        requests.post(f'{DEFAULT_API_URL}/categories', json={"title": "project{i}", "completed": False, "active": True, "description": "description{i}"})
+
+def delete_all_projects():
+    allProjects = requests.get(f'{DEFAULT_API_URL}/projects')
+    for project in allProjects.json()['projects']:
+        requests.delete(f'{DEFAULT_API_URL}/projects/{project["id"]}')
